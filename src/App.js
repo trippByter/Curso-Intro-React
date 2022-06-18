@@ -21,7 +21,7 @@ Babel transforma el código JS de function App.
 
 // Test
 const todos = [
-  {text: "Cortar cebolla", completed: false},
+  {text: "Cortar cebolla", completed: true},
   {text: "Curso React", completed: false},
   {text: "Bailar salsa", completed: false},
 ]
@@ -39,11 +39,15 @@ function App(props) {
           identificar cual es cual (componente)
           dentro de una lista y evitar render
           innecesario cuando un elemento no 
-          debe cambiar 
+          debe cambiar. 
           {todo.text} | De momento es la única prop
           que es distinta en el const todos */}
         {todos.map(todo => (
-          <TodoItem key={todo.text} text={todo.text}/>
+          <TodoItem 
+          key={todo.text} 
+          text={todo.text}
+          completed={todo.completed}
+          />
         ))}
       </TodoList>
       <CreateTodoButton />
