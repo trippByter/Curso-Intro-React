@@ -1,5 +1,11 @@
+import  React from "react";
+import {TodoCounter} from "./TodoCounter";
+import {TodoSearch} from "./TodoSearch";
+import {TodoList} from "./TodoList";
+import {TodoItem} from "./TodoItem";
+import {CreateTodoButton} from "./CreateTodoButton";
 import logo from './logo.svg';
-import './App.css';
+// import './App.css';
 /* 
 Componentes, invisibles HTML.
 Componentes, visibles REACT.
@@ -11,30 +17,37 @@ sólo trabaja con el formato JSX.
 Babel transforma el código JS de function App.
 */
 
+
+
+// Test
+const todos = [
+  {text: "Cortar cebolla", completed: false},
+  {text: "Curso React", completed: false},
+  {text: "Bailar salsa", completed: false},
+]
 // Recibimos parámetros en el componente con los props.
 function App(props) {
+  // ToDoList recibe los ToDo que generan los usuarios
+  // ToDoItem guardara su contenido por dentro y 
+  // con los props cambiamos el contenido de cada ToDo
   return (
-    // Usar "className" | no confunde class de js 
-    // REACT renderiza "elementos" en el HTML
-    // <div className="App"> , <header className="App-header"> , etc
-    <div className="App"> 
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {/* Learn React Jallalla ! */}
-          {/* {props.saludo} */}
-          {props.children}
-        </a>
-      </header>
-    </div>
+    <React.Fragment>
+      <TodoCounter />
+      <TodoSearch />
+      <TodoList>
+        {/* key={} | Esto es para que react pueda
+          identificar cual es cual (componente)
+          dentro de una lista y evitar render
+          innecesario cuando un elemento no 
+          debe cambiar 
+          {todo.text} | De momento es la única prop
+          que es distinta en el const todos */}
+        {todos.map(todo => (
+          <TodoItem key={todo.text} text={todo.text}/>
+        ))}
+      </TodoList>
+      <CreateTodoButton />
+    </React.Fragment>
   );
 }
 

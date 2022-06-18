@@ -30,10 +30,5 @@ desarrollo de react.
 Los props se mandan de padres a hijos
 */
 root.render(
-  // "saludo" no es atributo, es prop.
-  // <App saludo="Jallallita"/>
-  // HOLA APP es un prop.children
-  <App>
-    <h4>HOLA APP</h4>
-  </App>
+  <App />,
 );
