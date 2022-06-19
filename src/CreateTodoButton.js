@@ -1,9 +1,21 @@
 import React from "react";
 import "./CreateTodoButton.css";
 
-function CreateTodoButton(){
+/*-MANEJO DE EVENTOS(INTERNOS)-
+const onClickButton = Función invocada cuando
+reaccionamos al click del boton*/ 
+function CreateTodoButton(props){
+
+    const onClickButton = (msg) => {
+        alert(msg);
+    };
     return(
-        <button className="CreateTodoButton">+</button>
+        <button 
+            className="CreateTodoButton"
+            onClick={() => {onClickButton("Imaynallan click")}}
+        >
+            +
+        </button>
     );
 };
 
