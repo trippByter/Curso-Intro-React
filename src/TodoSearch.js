@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import "./TodoSearch.css";
 /*-MANEJO DE EVENTOS(INTERNOS)-
 "onSearchValueChange"
@@ -24,19 +24,21 @@ se irá modificando con "onChange={onSearchValueChange}"
 */
 function TodoSearch(){
     
-    const [searchValue, setSearchValue] = React.useState("");
+    const [searchValue, setSearchValue] = useState("");
 
     const onSearchValueChange = (event) => {
         console.log(event.target.value);
         setSearchValue(event.target.value);
-    };
+    }
+
     return[
-        <input className="TodoSearch" 
-        placeholder="Cebolla"
+        <input className="TodoSearch"
+        key={setSearchValue} 
+        placeholder="Tarea"
         value={searchValue}
         onChange={onSearchValueChange}
         />,
-        <p>{searchValue}</p>
+        <p key={searchValue}>{searchValue}</p>
     ];
 };
 
