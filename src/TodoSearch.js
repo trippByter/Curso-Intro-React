@@ -1,45 +1,36 @@
 import React, {useState} from "react";
 import "./TodoSearch.css";
 /*-MANEJO DE EVENTOS(INTERNOS)-
-"onSearchValueChange"
-Reaccionar ante cada cambio del input. Ante cada
-letra que escribe el usuario en el search,
-esto, para poder llamar diferentes opciones
-a mostrar al usuario */
-
-/*-MANEJO DE ESTADOS- React.useState()
-"const estado"
-Las props son estáticas, los estados son manipulables.
-Los estados cambian cuando el usuario interactua
-En el componente APP(Padre), creamos un estado y lo
-pasamos a los hijos. Logrando que, sin importar en cua
-de los componentes sea. Todos los componentes cambian.
-[state, setState] = "setState" es una function que edita,
-modifica el "state".
-BUSQUEDA TIPO GOOGLE
--Creamos un estado con string vacío que guaradamos en 
-"searchValue" y "setSearchValue" modifica el searchValue
-- "value={searchValue}" es el valor actual del input, el cual
-se irá modificando con "onChange={onSearchValueChange}"
+"event.target.value" devuelve el valor del input.
+<input ...onChange={onSearchValueChange}/>
+A cada cambio en el input, ejecutese "onSearchValueChange"
+====STATES====
+{searchValue, setSearchValue}
+Se manejan como props d quien lo llame
+"searchValue" => valor del input(state)
+"setSearchValue" => actualiza el valor del input(state)
+este ultimo, va dentro de la función onSearchValueChange
+que recibe el "event" (lo q el user teclea) y este todo
+ese valor es usado por el "setSearchValue" para cambiar el 
+estado del "searchValue"
 */
-function TodoSearch(){
-    
-    const [searchValue, setSearchValue] = useState("");
+
+function TodoSearch({searchValue, setSearchValue}){
 
     const onSearchValueChange = (event) => {
         console.log(event.target.value);
         setSearchValue(event.target.value);
-    }
+    };
 
-    return[
-        <input className="TodoSearch"
-        key={setSearchValue} 
-        placeholder="Tarea"
-        value={searchValue}
-        onChange={onSearchValueChange}
-        />,
-        <p key={searchValue}>{searchValue}</p>
-    ];
+    return(
+        <input 
+            className="TodoSearch"
+            key={setSearchValue} 
+            placeholder="Tarea"
+            value={searchValue}
+            onChange={onSearchValueChange}
+        />
+    );
 };
 
 // Con esta sintaxis indicamos que al hacer el import 

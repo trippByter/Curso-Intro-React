@@ -22,9 +22,10 @@ usar doble llave
         }}>Has completado 02 de 03 ToDo</h2>
 */
 
-function TodoCounter(){
+// {total, completed} == props
+function TodoCounter({total, completed}){
     return(
-        <h2 className="TodoCounter">Has completado 02 de 03 ToDo</h2>
+        <h2 className="TodoCounter">Has completado {completed} de {total} TO DO's</h2>
     );
 };
 

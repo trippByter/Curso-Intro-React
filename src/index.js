@@ -7,7 +7,7 @@ import App from './App'; // Componente renderizado
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 
-/*Formas de cerar componentes*/
+/*Formas de crear componentes*/
 // Formas NO usadas
 // class Componente extends React.Component
 /*function Appp(){

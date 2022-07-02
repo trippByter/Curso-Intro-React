@@ -2,10 +2,14 @@ import React from "react";
 import "./TodoItem.css";
 
 function TodoItem(props) {
+    // Esta función muestra un alert
+    // cuando clicamos en " √ "
     const onComplete = () => {
       alert("Ya completaste el todo: " + props.text)
     };
 
+    // Esta función muestra un alert
+    // cuando clicamos en " X "
     const onDelete = () => {
       alert("Borraste el todo: " + props.text)
     };
