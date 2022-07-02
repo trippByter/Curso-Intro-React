@@ -46,7 +46,7 @@ se irá modificando con "onChange={onSearchValueChange}"
 */
 // Recibimos parámetros en el componente con los props.
 function App() {
-  // Los todos se manejan con states porque permite
+  // Los "todos" se manejan con states porque permite
   // cambiar los valores de alguna variable para que
   // la app reaccione ante esos cambios
   const [todos, setTodos] = useState(defaultTodos);
@@ -85,6 +85,41 @@ function App() {
     });
   }
 
+  /* completeTodos: Método para marcar los "todos" como completados.
+  Se realiza manejando el estado.
+  Recibimos el "todo.text" porque es el id del todo.
+  "todoIndex": Encontramos la posición del TODO
+  que conincida con el "text".
+  "newTodos": Clonamos los "todos" en una variable.
+  "newTodos[todoIndex].completed = true;" cambia el "completed"
+  del todo con la posicion encontrada, a true 
+  "setTodos(newTodos);": actualiza el estado
+  ESTA FUNCIÓN PROVOCA RE-RENDER PARA ENVIAR LA NUEVA LISTA DE TODOS
+  */
+  
+  const completeTodo = (text) => {
+    const todoIndex = todos.findIndex(todo => todo.text === text);
+    
+    const newTodos = [...todos];
+    
+    newTodos[todoIndex].completed = true;
+
+    setTodos(newTodos);
+  };
+  /* Borrar TODOS
+  "newTodos.splice(todoIndex, 1)": Quitamos desde el 
+  índice(todoIndex), solo una posición
+  */
+  const deleteTodo = (text) => {
+    const todoIndex = todos.findIndex(todo => todo.text === text);
+    
+    const newTodos = [...todos];
+    
+    newTodos.splice(todoIndex, 1);
+
+    setTodos(newTodos);
+  };
+
 
   // ToDoList recibe los ToDo que generan los usuarios
   // ToDoItem guardara su contenido por dentro y 
@@ -113,6 +148,8 @@ function App() {
           key={todo.text} 
           text={todo.text}
           completed={todo.completed}
+          onComplete={() => completeTodo(todo.text)}
+          onDelete={() => deleteTodo(todo.text)}
           />
         ))}
       </TodoList>
