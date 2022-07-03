@@ -16,6 +16,8 @@ import { CreateTodoButton } from "../CreateTodoButton";
 // ToDoItem guardara su contenido por dentro y 
 // con los props cambiamos el contenido de cada ToDo
 function AppUI({
+  loading,
+  error,
   totalTodos,
   completedTodos,
   searchValue,
@@ -35,6 +37,13 @@ function AppUI({
         setSearchValue={setSearchValue}
       />
       <TodoList>
+        {/* Estado Error */}
+        {error && <p>Hubo un error...</p>}
+        {/* Estado Cargando */}
+        {loading && <p>Cargando...</p>}
+        {/* Todo Correcto */}
+        {(!loading && !searchedTodos.length) && <p>Crea tu primer TODO</p>}
+        
         {/* key={} | Esto es para que react pueda
           identificar cual es cual (componente)
           dentro de una lista y evitar render

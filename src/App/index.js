@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AppUI } from './AppUI'
 // import './App.css';
 /* 
@@ -32,36 +32,61 @@ Nos devuelve los item del local storage de los todos,
 tambien el item de un elemento en local storage
 itemName - Nombre del local storage("TODOS_V1")
 */
-function useLocalStorage(itemName, initialValue){
-  // Persisterncia de datos en localStorage
-  // TODOS_V1 - nombre del elemento guardado en localStorage
-  // Se invoca al local storage para traer un elemento
-  // que nos viene como parámetro de la funcion
-  const localStorageItem = localStorage.getItem(itemName);
+function useLocalStorage(itemName, initialValue) {
 
-  /*Creamos array vacío en caso que sea la primera vez
-  localStorage.setItem(itemName, JSON.stringify([]));
-  TODOS_V1 - 1er param, nombre del localStorage
-  JSON.stringify([]) - 2do param, info a guardar. Solo texto.
-  Cambiamos el JSON.stringify([]) por JSON.stringify(initialValue)
-  porque el estado inicial no siempre es un array
-  */
-  let parsedItem;
-  if(!localStorageItem){
-    localStorage.setItem(itemName, JSON.stringify([]));
-    parsedItem = initialValue;
-  }else{
-    parsedItem = JSON.parse(localStorageItem);
-  }
+  // Creamos estado de carga. Simulando conx API
+  // Al principio la aplicación estará cargando - true
+  // Cambia el estado despues con el useEffect
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   // Los "todos" se manejan con states porque permite
   // cambiar los valores de alguna variable para que
   // la app reaccione ante esos cambios
   // item - estado inicial || setItem - cambios al estado
-  const [item, setItem] = useState(parsedItem);
+  const [item, setItem] = useState(initialValue);
+
+  // Todo esto se ejecuta en cada render.
+  useEffect(() => {
+    setTimeout(() => {
+      // Metemos en bloque "try/catch" para
+      // manejar los errores
+      try {
+        // Persisterncia de datos en localStorage
+        // TODOS_V1 - nombre del elemento guardado en localStorage
+        // Se invoca al local storage para traer un elemento
+        // que nos viene como parámetro de la funcion
+        const localStorageItem = localStorage.getItem(itemName);
+
+        /*Creamos array vacío en caso que sea la primera vez
+        localStorage.setItem(itemName, JSON.stringify([]));
+        TODOS_V1 - 1er param, nombre del localStorage
+        JSON.stringify([]) - 2do param, info a guardar. Solo texto.
+        Cambiamos el JSON.stringify([]) por JSON.stringify(initialValue)
+        porque el estado inicial no siempre es un array
+        */
+        let parsedItem;
+        if (!localStorageItem) {
+          localStorage.setItem(itemName, JSON.stringify([]));
+          parsedItem = initialValue;
+        } else {
+          parsedItem = JSON.parse(localStorageItem);
+        }
+        // Cambiamos el estado inicial con parasedItem
+        setItem(parsedItem);
+        setLoading(false);
+      }catch(error){
+        // En caso de error, cambiamos el estado
+        // del error
+        setError(error);
+
+      }
+    }, 1000);
+  });
 
   /* 
   PERSISTENCIA EN LOCALSTORAGE 
+  NO SE EJECUTA EN CADA RENDER, SINO POR INVOCACION
   saveItem sirve de puente entre
   "completeTodo" y "deleteTodo".
   También guarda las actualizaciones de los item
@@ -72,15 +97,23 @@ function useLocalStorage(itemName, initialValue){
   setItem(newItem) - cambiamos el estado
   */
   const saveItem = (newItem) => {
-    const stringifiedItem = JSON.stringify(newItem);
-    localStorage.setItem(itemName, stringifiedItem);
-    setItem(newItem);
+    try{
+      const stringifiedItem = JSON.stringify(newItem);
+      localStorage.setItem(itemName, stringifiedItem);
+      setItem(newItem);
+    }catch(error){
+      setError(error);
+    }
   };
 
-  return [
+  // Si tenemos más estados en el custom hooks,
+  // es recomendable retornar un objeto
+  return {
     item,
     saveItem,
-  ]
+    loading,
+    error,
+  };
 }
 
 /*ABSTRACCIÓN DE LÓGICA DEL MANEJO DE ESTADO
@@ -105,8 +138,15 @@ function App() {
   // Recibimos [item, setItem] del useLocalStorage
   // Usamos el custom hook de local storage
   // Los TODOS siguen siendo arrays
-  const [todos, saveTodos] = useLocalStorage("TODOS_V1", []);
-  const [searchValue, setSearchValue] = useLocalStorage("");
+  const {
+    // item será todos
+    item: todos,
+    // saveItem será saveTodos
+    saveItem: saveTodos,
+    loading,
+    error,
+  } = useLocalStorage("TODOS_V1", []);
+  const [searchValue, setSearchValue] = useState("");
 
   // Contar cuantos Todos hemos completado 
   // y cuantos Todos tenemos en total.
@@ -179,10 +219,41 @@ function App() {
     saveTodos(newTodos);
   };
 
+  /*MANEJO DE EFECTOS
+  Es un react hook que nos permite ejecutar cierta
+  parte del código de los componentes, para que
+  no se ejecuten cada vez que se
+  haga render del componente sino, dependiend de 
+  ciertas condiciones.
+  Simulamos el tiempo de espera del request 
+  hecho hacia una API externa. En este tiempo la
+  aplicación no debe quedar en blanco. Una vez el
+  request se ejecuta, mostrar la info.
+  Se necesitan tres estados de carga:
+  - Cargando información.
+  - Hubo un error.
+  - Todo correcto.
+  
+  useEffect(() =>{
+    console.log('Imaynallan useEffect')
+  }, [las veces q hayan cambios en...] );
+  Ejecuta el código que se le envía,
+  justo antes de renderizar, es decir, cuando 
+  react tiene todo preparado para renderizar
+  */
 
+  // console.log("Imaynallan Render before useEffect")
+
+  // useEffect(() =>{
+  //   console.log('Imaynallan useEffect')
+  // }, [totalTodos] );
+
+  // console.log("Imaynallan Render after useEffect")
 
   return (
     <AppUI
+      loading={loading}
+      error={error}
       totalTodos={totalTodos}
       completedTodos={completedTodos}
       searchValue={searchValue}
