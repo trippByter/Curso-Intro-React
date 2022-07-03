@@ -15,12 +15,14 @@ Babel transforma el código JS de function App.
 
 
 // Test
+/*
 const defaultTodos = [
   { text: "Cortar cebolla", completed: true },
   { text: "Curso React", completed: false },
   { text: "Bailar salsa", completed: true },
   { text: "Ser fullstack", completed: false },
 ]
+*/
 
 /*ABSTRACCIÓN DE LÓGICA DEL MANEJO DE ESTADO
 EN APP.JS
@@ -41,10 +43,26 @@ se irá modificando con "onChange={onSearchValueChange}"
 */
 // Recibimos parámetros en el componente con los props.
 function App() {
+  // Persisterncia de datos en localStorage
+  // TODOS_V1 - nombre del elemento guardado en localStorage
+  const localStorageTodos = localStorage.getItem("TODOS_V1");
+
+  // Creamos array vacío en caso que sea la primera vez
+  // localStorage.setItem("TODOS_V1", JSON.stringify([]));
+  // TODOS_V1 - 1er param, nombre del localStorage
+  // JSON.stringify([]) - 2do param, info a guardar. Solo texto
+  let parsedTodos;
+  if(!localStorageTodos){
+    localStorage.setItem("TODOS_V1", JSON.stringify([]));
+    parsedTodos = []
+  }else{
+    parsedTodos = JSON.parse(localStorageTodos);
+  }
+
   // Los "todos" se manejan con states porque permite
   // cambiar los valores de alguna variable para que
   // la app reaccione ante esos cambios
-  const [todos, setTodos] = useState(defaultTodos);
+  const [todos, setTodos] = useState(parsedTodos);
   const [searchValue, setSearchValue] = useState("");
 
   // Contar cuantos Todos hemos completado 
@@ -80,6 +98,20 @@ function App() {
     });
   }
 
+  /* 
+  PERSISTENCIA EN LOCALSTORAGE 
+  saveTodos sirve de puente entre
+  "completeTodo" y "deleteTodo".
+  newTodos - array.
+  stringifiedTodos - convertir los todos a string.
+  localStorage.setItem(nombre de ese storage, string a guardar).
+  setTodos(newTodos) - cambiamos el estado
+  */
+  const saveTodos = (newTodos) => {
+    const stringifiedTodos = JSON.stringify(newTodos);
+    localStorage.setItem("TODOS_V1", stringifiedTodos);
+    setTodos(newTodos);
+  }
 
   /*
   const completeTodo = (text) => {} ;
@@ -103,7 +135,7 @@ function App() {
 
     newTodos[todoIndex].completed = true;
 
-    setTodos(newTodos);
+    saveTodos(newTodos);
   };
   /* Borrar TODOS
   "newTodos.splice(todoIndex, 1)": Quitamos desde el 
@@ -116,7 +148,7 @@ function App() {
 
     newTodos.splice(todoIndex, 1);
 
-    setTodos(newTodos);
+    saveTodos(newTodos);
   };
 
 
