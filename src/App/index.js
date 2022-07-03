@@ -24,6 +24,65 @@ const defaultTodos = [
 ]
 */
 
+/*CUSTOM HOOK PERSONALIZADO - LOCAL STORAGE
+Abstraemos la lógica de la persistencia
+de datos en local storage de AppUI.js
+useLocalStorage()
+Nos devuelve los item del local storage de los todos,
+tambien el item de un elemento en local storage
+itemName - Nombre del local storage("TODOS_V1")
+*/
+function useLocalStorage(itemName, initialValue){
+  // Persisterncia de datos en localStorage
+  // TODOS_V1 - nombre del elemento guardado en localStorage
+  // Se invoca al local storage para traer un elemento
+  // que nos viene como parámetro de la funcion
+  const localStorageItem = localStorage.getItem(itemName);
+
+  /*Creamos array vacío en caso que sea la primera vez
+  localStorage.setItem(itemName, JSON.stringify([]));
+  TODOS_V1 - 1er param, nombre del localStorage
+  JSON.stringify([]) - 2do param, info a guardar. Solo texto.
+  Cambiamos el JSON.stringify([]) por JSON.stringify(initialValue)
+  porque el estado inicial no siempre es un array
+  */
+  let parsedItem;
+  if(!localStorageItem){
+    localStorage.setItem(itemName, JSON.stringify([]));
+    parsedItem = initialValue;
+  }else{
+    parsedItem = JSON.parse(localStorageItem);
+  }
+
+  // Los "todos" se manejan con states porque permite
+  // cambiar los valores de alguna variable para que
+  // la app reaccione ante esos cambios
+  // item - estado inicial || setItem - cambios al estado
+  const [item, setItem] = useState(parsedItem);
+
+  /* 
+  PERSISTENCIA EN LOCALSTORAGE 
+  saveItem sirve de puente entre
+  "completeTodo" y "deleteTodo".
+  También guarda las actualizaciones de los item
+  en local storage y en el estado del componente App
+  newItem - array.
+  stringifiedItem - convertir los Item a string.
+  localStorage.setItem(nombre de ese storage, string a guardar).
+  setItem(newItem) - cambiamos el estado
+  */
+  const saveItem = (newItem) => {
+    const stringifiedItem = JSON.stringify(newItem);
+    localStorage.setItem(itemName, stringifiedItem);
+    setItem(newItem);
+  };
+
+  return [
+    item,
+    saveItem,
+  ]
+}
+
 /*ABSTRACCIÓN DE LÓGICA DEL MANEJO DE ESTADO
 EN APP.JS
 -MANEJO DE ESTADOS- React.useState()
@@ -43,27 +102,11 @@ se irá modificando con "onChange={onSearchValueChange}"
 */
 // Recibimos parámetros en el componente con los props.
 function App() {
-  // Persisterncia de datos en localStorage
-  // TODOS_V1 - nombre del elemento guardado en localStorage
-  const localStorageTodos = localStorage.getItem("TODOS_V1");
-
-  // Creamos array vacío en caso que sea la primera vez
-  // localStorage.setItem("TODOS_V1", JSON.stringify([]));
-  // TODOS_V1 - 1er param, nombre del localStorage
-  // JSON.stringify([]) - 2do param, info a guardar. Solo texto
-  let parsedTodos;
-  if(!localStorageTodos){
-    localStorage.setItem("TODOS_V1", JSON.stringify([]));
-    parsedTodos = []
-  }else{
-    parsedTodos = JSON.parse(localStorageTodos);
-  }
-
-  // Los "todos" se manejan con states porque permite
-  // cambiar los valores de alguna variable para que
-  // la app reaccione ante esos cambios
-  const [todos, setTodos] = useState(parsedTodos);
-  const [searchValue, setSearchValue] = useState("");
+  // Recibimos [item, setItem] del useLocalStorage
+  // Usamos el custom hook de local storage
+  // Los TODOS siguen siendo arrays
+  const [todos, saveTodos] = useLocalStorage("TODOS_V1", []);
+  const [searchValue, setSearchValue] = useLocalStorage("");
 
   // Contar cuantos Todos hemos completado 
   // y cuantos Todos tenemos en total.
@@ -96,21 +139,6 @@ function App() {
       return todoText.includes(searchText);
 
     });
-  }
-
-  /* 
-  PERSISTENCIA EN LOCALSTORAGE 
-  saveTodos sirve de puente entre
-  "completeTodo" y "deleteTodo".
-  newTodos - array.
-  stringifiedTodos - convertir los todos a string.
-  localStorage.setItem(nombre de ese storage, string a guardar).
-  setTodos(newTodos) - cambiamos el estado
-  */
-  const saveTodos = (newTodos) => {
-    const stringifiedTodos = JSON.stringify(newTodos);
-    localStorage.setItem("TODOS_V1", stringifiedTodos);
-    setTodos(newTodos);
   }
 
   /*
