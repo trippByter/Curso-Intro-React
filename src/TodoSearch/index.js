@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import "./TodoSearch.css";
 /*-MANEJO DE EVENTOS(INTERNOS)-
 "event.target.value" devuelve el valor del input.
@@ -15,24 +15,24 @@ ese valor es usado por el "setSearchValue" para cambiar el
 estado del "searchValue"
 */
 
-function TodoSearch({searchValue, setSearchValue}){
+function TodoSearch({ searchValue, setSearchValue }) {
 
-    const onSearchValueChange = (event) => {
-        console.log(event.target.value);
-        setSearchValue(event.target.value);
-    };
+  const onSearchValueChange = (event) => {
+    console.log(event.target.value);
+    setSearchValue(event.target.value);
+  };
 
-    return(
-        <input 
-            className="TodoSearch"
-            key={setSearchValue} 
-            placeholder="Tarea"
-            value={searchValue}
-            onChange={onSearchValueChange}
-        />
-    );
+  return (
+    <input
+      className="TodoSearch"
+      key={setSearchValue}
+      placeholder="Tarea"
+      value={searchValue}
+      onChange={onSearchValueChange}
+    />
+  );
 };
 
 // Con esta sintaxis indicamos que al hacer el import 
 // que debemos usar los nombres de los componentes tal cual son.
-export {TodoSearch};
+export { TodoSearch };

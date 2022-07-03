@@ -1,10 +1,5 @@
-import  React, {useState} from "react";
-import {TodoCounter} from "./TodoCounter";
-import {TodoSearch} from "./TodoSearch";
-import {TodoList} from "./TodoList";
-import {TodoItem} from "./TodoItem";
-import {CreateTodoButton} from "./CreateTodoButton";
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import { AppUI } from './AppUI'
 // import './App.css';
 /* 
 Componentes, invisibles HTML.
@@ -21,10 +16,10 @@ Babel transforma el código JS de function App.
 
 // Test
 const defaultTodos = [
-  {text: "Cortar cebolla", completed: true},
-  {text: "Curso React", completed: false},
-  {text: "Bailar salsa", completed: true},
-  {text: "Ser fullstack", completed: false},
+  { text: "Cortar cebolla", completed: true },
+  { text: "Curso React", completed: false },
+  { text: "Bailar salsa", completed: true },
+  { text: "Ser fullstack", completed: false },
 ]
 
 /*ABSTRACCIÓN DE LÓGICA DEL MANEJO DE ESTADO
@@ -67,13 +62,13 @@ function App() {
   // Saber si ya han escrito en el input
   // Si el input esta vacío, el searchedTodos
   // será el "todos"(defaultTodos, por el momento)
-  if (!searchValue.length >= 1){
+  if (!searchValue.length >= 1) {
     searchedTodos = todos;
     // Si ya han escrito algo
     // filtramos la cantidad
     // de searchedTodos"[]" 
   } else {
-    searchedTodos = todos.filter(todo =>{
+    searchedTodos = todos.filter(todo => {
       // Primero, convertimos a minúsculas, tanto
       // los "todos" como el input
       const todoText = todo.text.toLowerCase();
@@ -85,23 +80,27 @@ function App() {
     });
   }
 
-  /* completeTodos: Método para marcar los "todos" como completados.
-  Se realiza manejando el estado.
+
+  /*
+  const completeTodo = (text) => {} ;
+  cambia el estado del "completed" a true, 
+  al elemento ubicado que coincida con el "text",
+  el cual, es recibido como parámetro de la función.
+  completeTodos: Método para marcar los "todos" como completados.
   Recibimos el "todo.text" porque es el id del todo.
-  "todoIndex": Encontramos la posición del TODO
-  que conincida con el "text".
+  "todoIndex": Posición del TODO que conincide con el "text".
   "newTodos": Clonamos los "todos" en una variable.
   "newTodos[todoIndex].completed = true;" cambia el "completed"
-  del todo con la posicion encontrada, a true 
-  "setTodos(newTodos);": actualiza el estado
+  del todo con la posicion encontrada, a true. 
+  "setTodos(newTodos);": actualiza el estado con el cambio a newTodos.
   ESTA FUNCIÓN PROVOCA RE-RENDER PARA ENVIAR LA NUEVA LISTA DE TODOS
   */
-  
+
   const completeTodo = (text) => {
     const todoIndex = todos.findIndex(todo => todo.text === text);
-    
+
     const newTodos = [...todos];
-    
+
     newTodos[todoIndex].completed = true;
 
     setTodos(newTodos);
@@ -112,49 +111,26 @@ function App() {
   */
   const deleteTodo = (text) => {
     const todoIndex = todos.findIndex(todo => todo.text === text);
-    
+
     const newTodos = [...todos];
-    
+
     newTodos.splice(todoIndex, 1);
 
     setTodos(newTodos);
   };
 
 
-  // ToDoList recibe los ToDo que generan los usuarios
-  // ToDoItem guardara su contenido por dentro y 
-  // con los props cambiamos el contenido de cada ToDo
+
   return (
-    <React.Fragment>
-      <TodoCounter 
-        total={totalTodos}
-        completed={completedTodos}
-      />
-      <TodoSearch 
-        searchValue={searchValue}
-        setSearchValue={setSearchValue}
-      />
-      <TodoList>
-        {/* key={} | Esto es para que react pueda
-          identificar cual es cual (componente)
-          dentro de una lista y evitar render
-          innecesario cuando un elemento no 
-          debe cambiar. 
-          {todo.text} | De momento es la única prop
-          que es distinta en el const todos 
-          "key", "text", "completed" => PROPS*/}
-        {searchedTodos.map(todo => (
-          <TodoItem 
-          key={todo.text} 
-          text={todo.text}
-          completed={todo.completed}
-          onComplete={() => completeTodo(todo.text)}
-          onDelete={() => deleteTodo(todo.text)}
-          />
-        ))}
-      </TodoList>
-      <CreateTodoButton />
-    </React.Fragment>
+    <AppUI
+      totalTodos={totalTodos}
+      completedTodos={completedTodos}
+      searchValue={searchValue}
+      setSearchValue={setSearchValue}
+      searchedTodos={searchedTodos}
+      completeTodo={completeTodo}
+      deleteTodo={deleteTodo}
+    />
   );
 }
 
