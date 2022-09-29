@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { TodoContext } from "../TodoContext";
 import "./TodoSearch.css";
 /*-MANEJO DE EVENTOS(INTERNOS)-
 "event.target.value" devuelve el valor del input.
@@ -15,7 +16,9 @@ ese valor es usado por el "setSearchValue" para cambiar el
 estado del "searchValue"
 */
 
-function TodoSearch({ searchValue, setSearchValue }) {
+function TodoSearch() {
+  // Aplicamos lógica del React Context
+  const { searchValue, setSearchValue } = React.useContext(TodoContext);
 
   const onSearchValueChange = (event) => {
     console.log(event.target.value);

@@ -1,4 +1,5 @@
 import React from "react";
+import {TodoContext} from "../TodoContext";
 // Agregar CSS | Importamos archivo css
 import "./TodoCounter.css";
 
@@ -22,10 +23,13 @@ usar doble llave
 }}>Has completado 02 de 03 ToDo</h2>
 */
 
-// {total, completed} == props
-function TodoCounter({ total, completed }) {
+// {totalTodos, completedTodos} == props
+function TodoCounter() {
+  // Aplicamos lógica de React Context
+  const {totalTodos, completedTodos} = React.useContext(TodoContext);
+
   return (
-    <h2 className="TodoCounter">Has completado {completed} de {total} TO DO's</h2>
+    <h2 className="TodoCounter">Has completado {completedTodos} de {totalTodos} TO DO's</h2>
   );
 };
 
