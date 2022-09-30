@@ -6,8 +6,10 @@ const onClickButton = Función invocada cuando
 reaccionamos al click del boton*/
 function CreateTodoButton(props) {
 
-  const onClickButton = (msg) => {
-    alert(msg);
+  // Modificamos funcionamiento del botón
+  // y modificamos el estado del modal
+  const onClickButton = () => {
+    props.setOpenModal(true);
   };
   return (
     <button

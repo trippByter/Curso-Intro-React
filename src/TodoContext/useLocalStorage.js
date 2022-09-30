@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from 'react';
 
-
-
-
 /*CUSTOM HOOK PERSONALIZADO - LOCAL STORAGE
 Abstraemos la lógica de la persistencia
 de datos en local storage de AppUI.js

@@ -33,6 +33,9 @@ function TodoProvider(props){
   } = useLocalStorage("TODOS_V1", []);
   const [searchValue, setSearchValue] = useState("");
 
+  // Estados del modal
+  const [openModal, setOpenModal] = React.useState(false);
+
   // Contar cuantos Todos hemos completado 
   // y cuantos Todos tenemos en total.
   // !!todo.completed == true. Dos negativos dan positivo
@@ -117,6 +120,8 @@ function TodoProvider(props){
       searchedTodos,
       completeTodo,
       deleteTodo,
+      openModal,
+      setOpenModal,
 		}}>
 			{props.children}
 		</TodoContext.Provider>
