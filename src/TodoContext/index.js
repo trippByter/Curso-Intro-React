@@ -93,6 +93,20 @@ function TodoProvider(props){
 
     saveTodos(newTodos);
   };
+
+  // FUNCION PARA AÑADIR TODOS
+  const addTodo = (text) => {
+
+    const newTodos = [...todos];
+
+    newTodos.push({
+      completed: false,
+      text,
+    });
+
+    saveTodos(newTodos);
+  };
+
   /* Borrar TODOS
   "newTodos.splice(todoIndex, 1)": Quitamos desde el 
   índice(todoIndex), solo una posición
@@ -119,6 +133,7 @@ function TodoProvider(props){
       setSearchValue,
       searchedTodos,
       completeTodo,
+      addTodo,
       deleteTodo,
       openModal,
       setOpenModal,
