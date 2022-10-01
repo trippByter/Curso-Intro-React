@@ -29,7 +29,7 @@ function TodoSearch() {
     <input
       className="TodoSearch"
       key={setSearchValue}
-      placeholder="Tarea"
+      placeholder="Conócete a ti mismo..."
       value={searchValue}
       onChange={onSearchValueChange}
     />
