@@ -4,7 +4,7 @@ creamos este archivo que es la abstracción de la UI
 de App.js
 */
 
-import React, { useState } from "react";
+import React from "react";
 import { TodoContext } from "../TodoContext";
 import { TodoCounter } from "../TodoCounter";
 import { TodoSearch } from "../TodoSearch";
